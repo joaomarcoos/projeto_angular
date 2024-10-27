@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="container-list">
+
+    <div class="container-form">
+      <form class="form" (ngSubmit)=" getCocktailByName()">
+        <div class="form-select">
+          <select name="" id=""></select>
+        </div>
+        <div class="form-input">
+          <input type="text" [(ngModel)]="cocktailName" name="cocktailName" placeholder="Digite o nome do Cocktel">
+          <button type="submit">Pesquisar</button>
+        </div>
+      </form>
+    </div>
+
+    <app-cocktail-list [cocktailNames]="listCocktailName"></app-cocktail-list>
+
+  </div>
+</div>

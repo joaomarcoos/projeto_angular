@@ -1,0 +1,23 @@
+<div *ngIf="isLoading" class="loading-container">
+  <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="notFound && !isLoading" class="not-found-message">
+  Não encontrado!
+</div>
+
+<div class="container-list-all " *ngIf="!isLoading && !notFound">
+  <div class="cocktail-card" *ngFor="let cocktail of paginatedCocktails">
+    <img [src]="cocktail.strDrinkThumb" alt="{{cocktail.strDrink}}" class="cocktail-image">
+    <div class="cocktail-info">
+      <h3 class="cocktail-name">{{cocktail.strDrink}}</h3>
+      <p class="cocktail-type">{{cocktail.strAlcoholic}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="pagination-controls" *ngIf="!isLoading && !notFound && paginatedCocktails.length > 0">
+  <button (click)="previewPage()" [disabled]="currentPage === 1">Anterior</button>
+  <span>Página {{currentPage}} de {{totalPages}}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Próxima</button>
+</div>

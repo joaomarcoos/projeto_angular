@@ -1,0 +1,70 @@
+.container{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.container-list{
+  display: flex;
+  width: 70%;
+  flex-direction: column;
+  padding: 30px;
+  margin: 20px 0;
+}
+
+/* Formatação form*/
+
+.container-form{
+  width: 100%;
+  background-color: #faf6f6;
+}
+
+.form{
+  display: flex;
+  flex-direction: row;
+  gap:10px;
+  margin: 10px 0;
+  border: 1px solid rgb(236, 236, 236);
+}
+.form-select{
+  display: flex;
+  flex: 1;
+}
+
+.form-select select{
+  flex: 1;
+  padding: 2em;
+  border: none;
+}
+
+.form-select select:focus{
+  outline: none;
+}
+
+.form-input{
+  display: flex;
+  flex: 2;
+}
+
+.form-input input{
+  width: 300px;
+  padding: 2em;
+  border: none;
+}
+
+.form-input input:focus{
+  outline: none;
+}
+.form-input input::placeholder{
+  font-size: 18px;
+}
+.form-input button{
+  background-color: #9558cf;
+  flex: 1;
+  color: white;
+  padding: 2em;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
