@@ -2,14 +2,59 @@
   <div class="container-list">
 
     <div class="container-form">
-      <form class="form" (ngSubmit)=" getCocktailByName()">
+      <form class="form" (ngSubmit)="applyFilter()">
         <div class="form-select">
-          <select name="" id=""></select>
+          <select [(ngModel)]="filterType" name="filterType">
+            <option value="">Nenhum filtro selecionado</option>
+            <option value="name">Por nome</option>
+            <option value="category">Por categoria</option>
+            <option value="teorAlcoholic">Por teor alcoólico</option>
+            <option value="typeGlass">Por tipo do copo</option>
+            <option value="ingredient">Por Ingredient</option>
+          </select>
         </div>
-        <div class="form-input">
+
+        <div class="form-input" *ngIf="filterType === 'name'">
           <input type="text" [(ngModel)]="cocktailName" name="cocktailName" placeholder="Digite o nome do Cocktel">
-          <button type="submit">Pesquisar</button>
         </div>
+
+        <div class="form-select" *ngIf="filterType === 'category'">
+          <select name="selectedCategory">
+            <option value="">Selecione uma Categoria</option>
+            <option *ngFor="let category of listCocktailCategory" [value]="category">
+              {{ category.strCategory }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-select" *ngIf="filterType === 'teorAlcoholic'">
+          <select name="selectedCategory">
+            <option value="">Selecione o teor alcoólico</option>
+            <option *ngFor="let teorAlcoholic of listCocktailTeorAlcoholic" [value]="teorAlcoholic">
+              {{ teorAlcoholic.strAlcoholic }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-select" *ngIf="filterType === 'typeGlass'">
+          <select name="selectedCategory">
+            <option value="">Selecione o tipo do copo</option>
+            <option *ngFor="let typeGlass of listCocktailTypeGlass" [value]="typeGlass">
+              {{typeGlass.strGlass}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-select" *ngIf="filterType === 'ingredient'">
+          <select name="selectedCategory">
+            <option value="">Selecione um ingrediente</option>
+            <option *ngFor="let ingredient of listCocktailIngredient" [value]="ingredient">
+              {{ ingredient.strIngredient1 }}
+            </option>
+          </select>
+        </div>
+
+        <button type="submit">Pesquisar</button>
       </form>
     </div>
 

@@ -31,16 +31,13 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
   ngOnChanges(changes: SimpleChanges): void {
       if(changes['cocktailNames']){
-        if(this.cocktailNames.length > 0){
+        if(this.cocktailNames && this.cocktailNames.length > 0){
           this.cocktails = this.cocktailNames;
-          this.notFound =false;
+          this.notFound = true;
         }
-
-      }else {
-        this.loadCocktails();
-        this.notFound = false;
+          this.loadCocktails()
+          this.notFound = false;
       }
-
         this.currentPage = 1;
         this.calculatePage();
         this.updatePaginatedCocktails();
@@ -50,7 +47,14 @@ export class CocktailListComponent implements OnInit, OnChanges{
     this.isLoading = true;
     this.cocktailService.getCocktailsByLetter('a').subscribe({
       next:(data)=>{
-        this.cocktails = data;
+
+        if(data && data.length>0){
+          this.cocktails = data;
+          this.notFound = false;
+        }else{
+          this.cocktails = [];
+          this.notFound = true;
+        }
         this.calculatePage();
         this.updatePaginatedCocktails();
         this.isLoading = false;

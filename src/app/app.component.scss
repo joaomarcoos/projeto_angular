@@ -5,6 +5,10 @@
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+body{
+  background-color: #f9f9f9;
+}
+
 
 .navbar-container{
   width: 100%;
@@ -23,6 +27,10 @@
   font-size: 2em;
   font-weight: bold;
   cursor: pointer;
+}
+
+.nav-logo a{
+  text-decoration: none;
 }
 
 .nav-item{
@@ -50,16 +58,25 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 4rem;
+  padding: 3rem;
   background: linear-gradient(#e66465, #9198e5);
   position: relative;
 
 }
 
 .footer-content{
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
+}
+
+.footer-content img{
+  display: flex;
+  width: 150px;
+  height: auto;
+  margin-right: 3rem;
 }
 
 .content-text p{
