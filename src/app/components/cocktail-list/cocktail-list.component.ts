@@ -13,6 +13,10 @@ import { SpinnerComponent } from "../spinner/spinner.component";
 })
 export class CocktailListComponent implements OnInit, OnChanges{
 
+  @Input() selectedCategory!: string;
+  @Input() cocktailNames: Cocktail[] = [];
+  @Input() listCocktailCategory: Cocktail[] = [];
+
   cocktails: Cocktail[] = [];
   paginatedCocktails: Cocktail[] = [];
   currentPage: number = 1;
@@ -20,7 +24,6 @@ export class CocktailListComponent implements OnInit, OnChanges{
   totalPages: number = 0;
   isLoading: boolean = true;
   notFound: boolean = false;
-  @Input() cocktailNames: Cocktail[] = [];
 
   constructor(private cocktailService: CocktailService){}
 
@@ -37,6 +40,26 @@ export class CocktailListComponent implements OnInit, OnChanges{
         }
           this.loadCocktails()
           this.notFound = false;
+      }
+
+
+      else if(changes['selectedCategory'] && this.selectedCategory){
+        console.log('Estrutura de listCocktailCategory:', JSON.stringify(this.listCocktailCategory, null, 2));
+
+        this.cocktails = this.listCocktailCategory
+        .filter((category)=>{
+          const isMath = category.strCategory === this.selectedCategory;
+          console.log('Verificando categoria:', category.strCategory, '==', this.selectedCategory, '=>', isMath);
+          return isMath;
+        })
+
+        if (this.cocktails.length === 0) {
+          this.notFound = true;
+        } else {
+          this.notFound = false;
+        }
+
+        console.log('filtrados', this.cocktails)
       }
         this.currentPage = 1;
         this.calculatePage();
@@ -67,6 +90,7 @@ export class CocktailListComponent implements OnInit, OnChanges{
       }
     })
   }
+
 
   calculatePage():void{
     this.totalPages = Math.ceil(this.cocktails.length / this.itemsPerPage);

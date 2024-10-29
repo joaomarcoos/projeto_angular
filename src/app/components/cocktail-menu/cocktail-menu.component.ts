@@ -15,6 +15,9 @@ import { NgFor, NgIf } from '@angular/common';
 export class CocktailMenuComponent implements OnInit{
   cocktailName: string = '';
   filterType: string = '';
+  selectedCategory: string = '';
+
+
   listCocktailName: Cocktail[] = [];
   listCocktailCategory: Cocktail[] = [];
   listCocktailTeorAlcoholic: Cocktail[] = [];
@@ -87,7 +90,9 @@ export class CocktailMenuComponent implements OnInit{
       this.getCocktailByName();
     }
     if(this.filterType === 'category'){
-      this.getCocktailByCategory();
+      // this.getCocktailByCategory();
+      this.selectedCategory = this.selectedCategory;
+      console.log(this.selectedCategory)
     }
     if(this.filterType === 'teorAlcoholic'){
       // Implementar filtro por teor alcoolico

@@ -19,16 +19,16 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'category'">
-          <select name="selectedCategory">
+          <select name="selectedCategory" [(ngModel)]="selectedCategory" (change)="applyFilter()">
             <option value="">Selecione uma Categoria</option>
-            <option *ngFor="let category of listCocktailCategory" [value]="category">
+            <option *ngFor="let category of listCocktailCategory" [value]="category.strCategory">
               {{ category.strCategory }}
             </option>
           </select>
         </div>
 
         <div class="form-select" *ngIf="filterType === 'teorAlcoholic'">
-          <select name="selectedCategory">
+          <select name="selectedTeorAlcoholic">
             <option value="">Selecione o teor alcoólico</option>
             <option *ngFor="let teorAlcoholic of listCocktailTeorAlcoholic" [value]="teorAlcoholic">
               {{ teorAlcoholic.strAlcoholic }}
@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'typeGlass'">
-          <select name="selectedCategory">
+          <select name="selectedTypeGlass">
             <option value="">Selecione o tipo do copo</option>
             <option *ngFor="let typeGlass of listCocktailTypeGlass" [value]="typeGlass">
               {{typeGlass.strGlass}}
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'ingredient'">
-          <select name="selectedCategory">
+          <select name="selectedIngredient">
             <option value="">Selecione um ingrediente</option>
             <option *ngFor="let ingredient of listCocktailIngredient" [value]="ingredient">
               {{ ingredient.strIngredient1 }}
@@ -58,7 +58,7 @@
       </form>
     </div>
 
-    <app-cocktail-list [cocktailNames]="listCocktailName"></app-cocktail-list>
+    <app-cocktail-list [cocktailNames]="listCocktailName" [listCocktailCategory]="listCocktailCategory" [selectedCategory]="selectedCategory"></app-cocktail-list>
 
   </div>
 </div>
