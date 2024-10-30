@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { CocktailListComponent } from "../cocktail-list/cocktail-list.component";
-import { FormsModule} from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CocktailService } from '../../services/cocktail.service';
 import { Cocktail } from '../../models/Cocktail';
 import { NgFor, NgIf } from '@angular/common';
@@ -8,7 +8,7 @@ import { NgFor, NgIf } from '@angular/common';
 @Component({
   selector: 'app-cocktail-menu',
   standalone: true,
-  imports: [CocktailListComponent, FormsModule, NgIf,NgFor],
+  imports: [CocktailListComponent, FormsModule, ReactiveFormsModule, NgIf,NgFor],
   templateUrl: './cocktail-menu.component.html',
   styleUrl: './cocktail-menu.component.scss'
 })
@@ -16,6 +16,8 @@ export class CocktailMenuComponent implements OnInit{
   cocktailName: string = '';
   filterType: string = '';
   selectedCategory: string = '';
+
+  selectCategoryControl = new FormControl();
 
 
   listCocktailName: Cocktail[] = [];
@@ -91,8 +93,8 @@ export class CocktailMenuComponent implements OnInit{
     }
     if(this.filterType === 'category'){
       // this.getCocktailByCategory();
-      this.selectedCategory = this.selectedCategory;
-      console.log(this.selectedCategory)
+      this.selectedCategory = this.selectCategoryControl.value;
+      console.log('categoria selecionada', this.selectedCategory)
     }
     if(this.filterType === 'teorAlcoholic'){
       // Implementar filtro por teor alcoolico

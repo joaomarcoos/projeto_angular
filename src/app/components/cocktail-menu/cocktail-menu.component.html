@@ -19,7 +19,7 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'category'">
-          <select name="selectedCategory" [(ngModel)]="selectedCategory" (change)="applyFilter()">
+          <select [formControl]="selectCategoryControl" (change)="applyFilter()">
             <option value="">Selecione uma Categoria</option>
             <option *ngFor="let category of listCocktailCategory" [value]="category.strCategory">
               {{ category.strCategory }}
@@ -58,7 +58,7 @@
       </form>
     </div>
 
-    <app-cocktail-list [cocktailNames]="listCocktailName" [listCocktailCategory]="listCocktailCategory" [selectedCategory]="selectedCategory"></app-cocktail-list>
+    <app-cocktail-list [cocktailNames]="listCocktailName" [selectedCategory]="selectedCategory"></app-cocktail-list>
 
   </div>
 </div>

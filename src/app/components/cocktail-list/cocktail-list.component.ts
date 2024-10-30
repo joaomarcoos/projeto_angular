@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { Cocktail } from '../../models/Cocktail';
 import { CocktailService } from '../../services/cocktail.service';
 import { SpinnerComponent } from "../spinner/spinner.component";
+import { forkJoin, map, race, tap } from 'rxjs';
 
 @Component({
   selector: 'app-cocktail-list',
@@ -15,7 +16,6 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
   @Input() selectedCategory!: string;
   @Input() cocktailNames: Cocktail[] = [];
-  @Input() listCocktailCategory: Cocktail[] = [];
 
   cocktails: Cocktail[] = [];
   paginatedCocktails: Cocktail[] = [];
@@ -43,24 +43,24 @@ export class CocktailListComponent implements OnInit, OnChanges{
       }
 
 
-      else if(changes['selectedCategory'] && this.selectedCategory){
-        console.log('Estrutura de listCocktailCategory:', JSON.stringify(this.listCocktailCategory, null, 2));
+      // else if(changes['selectedCategory'] && this.selectedCategory){
+      //   // console.log('Estrutura de listCocktailCategory:', JSON.stringify(this.listCocktailCategory, null, 2));
 
-        this.cocktails = this.listCocktailCategory
-        .filter((category)=>{
-          const isMath = category.strCategory === this.selectedCategory;
-          console.log('Verificando categoria:', category.strCategory, '==', this.selectedCategory, '=>', isMath);
-          return isMath;
-        })
+      //   this.cocktails = this.
+      //   .filter((category)=>{
+      //     const isMath = category.strCategory === this.selectedCategory;
+      //     // console.log('Verificando categoria:', category.strCategory, '==', this.selectedCategory, '=>', isMath);
+      //     return isMath;
+      //   })
 
-        if (this.cocktails.length === 0) {
-          this.notFound = true;
-        } else {
-          this.notFound = false;
-        }
+      //   if (this.cocktails.length === 0) {
+      //     this.notFound = true;
+      //   } else {
+      //     this.notFound = false;
+      //   }
 
-        console.log('filtrados', this.cocktails)
-      }
+      //   console.log('filtrados', this.cocktails)
+      // }
         this.currentPage = 1;
         this.calculatePage();
         this.updatePaginatedCocktails();
@@ -68,16 +68,27 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
   loadCocktails(): void {
     this.isLoading = true;
-    this.cocktailService.getCocktailsByLetter('a').subscribe({
-      next:(data)=>{
+    const allCocktails: Cocktail[] = [];
 
-        if(data && data.length>0){
-          this.cocktails = data;
-          this.notFound = false;
-        }else{
-          this.cocktails = [];
-          this.notFound = true;
-        }
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+    const cocktailAllRequest = alphabet.map(letter =>
+      this.cocktailService.getCocktailsByLetter(letter).pipe(
+        tap((data) =>{
+          if(data && data.length > 0){
+            allCocktails.push(...data);
+            console.log("all cocktails: ", allCocktails)
+          }
+        })
+      )
+    )
+
+
+    forkJoin(cocktailAllRequest).subscribe({
+      next:()=>{
+        this.cocktails = allCocktails;
+        this.notFound = allCocktails.length === 0;
+
         this.calculatePage();
         this.updatePaginatedCocktails();
         this.isLoading = false;
@@ -86,6 +97,9 @@ export class CocktailListComponent implements OnInit, OnChanges{
         console.error('Erro ao buscar os cocktéis', err);
         this.cocktails = [];
         this.notFound = true;
+        this.isLoading = false;
+      },
+      complete: () => {
         this.isLoading = false;
       }
     })

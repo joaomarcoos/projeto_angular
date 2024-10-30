@@ -7,6 +7,8 @@
 
 body{
   background-color: #f9f9f9;
+  position: relative;
+  min-height: 100vh;
 }
 
 
@@ -58,9 +60,9 @@ body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 3rem;
+  padding: 1em;
   background: linear-gradient(#e66465, #9198e5);
-  position: relative;
+  margin: 0;
 
 }
 
