@@ -16,8 +16,12 @@ export class CocktailMenuComponent implements OnInit{
   cocktailName: string = '';
   filterType: string = '';
   selectedCategory: string = '';
+  selectedTeorAlcoholic: string = '';
+  selectedTypeGlass: string = '';
 
-  selectCategoryControl = new FormControl();
+  selectCategoryControl = new FormControl('');
+  selectTeorAlcoholicControl = new FormControl('');
+  selectTypeGlassControl = new FormControl('');
 
 
   listCocktailName: Cocktail[] = [];
@@ -39,7 +43,7 @@ export class CocktailMenuComponent implements OnInit{
       this.cocktailService.getCocktailByName(this.cocktailName).subscribe({
         next:(data)=>{
           this.listCocktailName = data;
-          console.log('Nome do cocktail: ', data)
+          // console.log('Nome do cocktail: ', data)
         },
         error:(err)=>console.error('Erro ao buscar cocktail: ', err)
       });
@@ -51,7 +55,7 @@ export class CocktailMenuComponent implements OnInit{
     this.cocktailService.getCocktailByCategory().subscribe({
       next:(data)=>{
         this.listCocktailCategory = data;
-        console.log('Categorias dos cocktails: ', this.listCocktailCategory)
+        // console.log('Categorias dos cocktails: ', this.listCocktailCategory)
       },
       error:(err)=>console.error('Erro ao buscar categorias de cocktails: ', err)
     });
@@ -61,7 +65,7 @@ export class CocktailMenuComponent implements OnInit{
     this.cocktailService.getCocktailByTeorAlcoholic().subscribe({
       next:(data)=>{
         this.listCocktailTeorAlcoholic = data;
-        console.log('Cocktails com teor alcoolico: ', this.listCocktailTeorAlcoholic)
+        // console.log('Cocktails com teor alcoolico: ', this.listCocktailTeorAlcoholic)
       },
       error:(err)=>console.error('Erro ao buscar cocktails com teor alcoolico: ', err)
     });
@@ -71,7 +75,7 @@ export class CocktailMenuComponent implements OnInit{
     this.cocktailService.getCocktailTypeGlass().subscribe({
       next:(data)=>{
         this.listCocktailTypeGlass = data;
-        console.log('Cocktails por glass: ', this.listCocktailTypeGlass)
+        // console.log('Cocktails por glass: ', this.listCocktailTypeGlass)
       },
       error:(err)=>console.error('Erro ao buscar cocktails por glass: ', err)
     })
@@ -81,7 +85,7 @@ export class CocktailMenuComponent implements OnInit{
     this.cocktailService.getCocktailIngredient().subscribe({
       next:(data)=>{
         this.listCocktailIngredient = data;
-        console.log('Cocktails por ingrediente: ', this.listCocktailIngredient)
+        // console.log('Cocktails por ingrediente: ', this.listCocktailIngredient)
       },
       error:(err)=>console.error('Erro ao buscar cocktails por ingrediente: ', err)
     })
@@ -93,11 +97,16 @@ export class CocktailMenuComponent implements OnInit{
     }
     if(this.filterType === 'category'){
       // this.getCocktailByCategory();
-      this.selectedCategory = this.selectCategoryControl.value;
+      this.selectedCategory = this.selectCategoryControl.value ?? '';
       console.log('categoria selecionada', this.selectedCategory)
     }
     if(this.filterType === 'teorAlcoholic'){
-      // Implementar filtro por teor alcoolico
+      this.selectedTeorAlcoholic = this.selectTeorAlcoholicControl.value ?? '';
+      console.log('Teor Alcoólico selecionada', this.selectedTeorAlcoholic)
+    }
+    if(this.filterType === 'typeGlass'){
+      this.selectedTypeGlass = this.selectTypeGlassControl.value?? '';
+      console.log('Tipo de Glass selecionado', this.selectedTypeGlass)
     }
   }
 }

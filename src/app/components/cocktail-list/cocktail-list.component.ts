@@ -15,9 +15,12 @@ import { forkJoin, map, race, tap } from 'rxjs';
 export class CocktailListComponent implements OnInit, OnChanges{
 
   @Input() selectedCategory!: string;
+  @Input() selectedTeorAlcoholic!: string;
+  @Input() selectedTypeGlass!: string;
   @Input() cocktailNames: Cocktail[] = [];
 
   cocktails: Cocktail[] = [];
+  originalListCocktails: Cocktail[] = [];
   paginatedCocktails: Cocktail[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 12;
@@ -43,27 +46,17 @@ export class CocktailListComponent implements OnInit, OnChanges{
       }
 
 
-      // else if(changes['selectedCategory'] && this.selectedCategory){
-      //   // console.log('Estrutura de listCocktailCategory:', JSON.stringify(this.listCocktailCategory, null, 2));
+      if(changes['selectedCategory']){
 
-      //   this.cocktails = this.
-      //   .filter((category)=>{
-      //     const isMath = category.strCategory === this.selectedCategory;
-      //     // console.log('Verificando categoria:', category.strCategory, '==', this.selectedCategory, '=>', isMath);
-      //     return isMath;
-      //   })
+        this.filterCocktailsByCategory();
+      }
 
-      //   if (this.cocktails.length === 0) {
-      //     this.notFound = true;
-      //   } else {
-      //     this.notFound = false;
-      //   }
-
-      //   console.log('filtrados', this.cocktails)
-      // }
-        this.currentPage = 1;
-        this.calculatePage();
-        this.updatePaginatedCocktails();
+      if(changes['selectedTeorAlcoholic']){
+        this.filterCocktailsByTeorAlcoholic();
+      }
+      if(changes['selectedTypeGlass']){
+        this.filterCocktailsByTypeGlass();
+      }
   }
 
   loadCocktails(): void {
@@ -77,16 +70,21 @@ export class CocktailListComponent implements OnInit, OnChanges{
         tap((data) =>{
           if(data && data.length > 0){
             allCocktails.push(...data);
-            console.log("all cocktails: ", allCocktails)
+            // console.log("all cocktails: ", allCocktails)
           }
         })
       )
     )
 
+    // console.log("requisição do cockteis: ", cocktailAllRequest)
+
 
     forkJoin(cocktailAllRequest).subscribe({
       next:()=>{
-        this.cocktails = allCocktails;
+        // console.log("dados no forkJoin: ", this.cocktails = allCocktails)
+
+        this.cocktails = allCocktails.sort((nameCocktail, letter) => nameCocktail.strDrink.localeCompare(letter.strDrink));
+        this.originalListCocktails = [...this.cocktails];
         this.notFound = allCocktails.length === 0;
 
         this.calculatePage();
@@ -105,6 +103,39 @@ export class CocktailListComponent implements OnInit, OnChanges{
     })
   }
 
+ filterCocktailsByCategory():void{
+
+  if(this.selectedCategory){
+    this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strCategory.toLowerCase().includes(this.selectedCategory.toLowerCase()));
+
+    this.currentPage = 1;
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+  }
+ }
+
+ filterCocktailsByTeorAlcoholic():void{
+  if(this.selectedTeorAlcoholic){
+    this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strAlcoholic.toLowerCase().includes(this.selectedTeorAlcoholic.toLowerCase()));
+    console.log('filtrador teor alcoolico: ', this.cocktails)
+
+    this.currentPage = 1;
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+ }
+}
+
+filterCocktailsByTypeGlass():void{
+  if(this.selectedTypeGlass){
+    this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strGlass.toLowerCase().includes(this.selectedTypeGlass.toLowerCase()));
+    console.log('filtrador teor alcoolico: ', this.cocktails)
+
+    this.currentPage = 1;
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+  }
+}
+
 
   calculatePage():void{
     this.totalPages = Math.ceil(this.cocktails.length / this.itemsPerPage);
@@ -112,7 +143,7 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
   updatePaginatedCocktails(): void {
 
-    this.totalPages = Math.ceil(this.cocktailNames.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(this.cocktails.length / this.itemsPerPage);
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedCocktails = this.cocktails.slice(startIndex, endIndex);

@@ -19,7 +19,7 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'category'">
-          <select [formControl]="selectCategoryControl" (change)="applyFilter()">
+          <select [formControl]="selectCategoryControl">
             <option value="">Selecione uma Categoria</option>
             <option *ngFor="let category of listCocktailCategory" [value]="category.strCategory">
               {{ category.strCategory }}
@@ -28,18 +28,18 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'teorAlcoholic'">
-          <select name="selectedTeorAlcoholic">
+          <select [formControl]="selectTeorAlcoholicControl">
             <option value="">Selecione o teor alcoólico</option>
-            <option *ngFor="let teorAlcoholic of listCocktailTeorAlcoholic" [value]="teorAlcoholic">
+            <option *ngFor="let teorAlcoholic of listCocktailTeorAlcoholic" [value]="teorAlcoholic.strAlcoholic">
               {{ teorAlcoholic.strAlcoholic }}
             </option>
           </select>
         </div>
 
         <div class="form-select" *ngIf="filterType === 'typeGlass'">
-          <select name="selectedTypeGlass">
+          <select [formControl]="selectTypeGlassControl">
             <option value="">Selecione o tipo do copo</option>
-            <option *ngFor="let typeGlass of listCocktailTypeGlass" [value]="typeGlass">
+            <option *ngFor="let typeGlass of listCocktailTypeGlass" [value]="typeGlass.strGlass">
               {{typeGlass.strGlass}}
             </option>
           </select>
@@ -58,7 +58,13 @@
       </form>
     </div>
 
-    <app-cocktail-list [cocktailNames]="listCocktailName" [selectedCategory]="selectedCategory"></app-cocktail-list>
+    <app-cocktail-list
+      [cocktailNames]="listCocktailName"
+      [selectedCategory]="selectedCategory"
+      [selectedTeorAlcoholic]="selectedTeorAlcoholic"
+      [selectedTypeGlass]="selectedTypeGlass"
+      >
+    </app-cocktail-list>
 
   </div>
 </div>
