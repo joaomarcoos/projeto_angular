@@ -18,10 +18,14 @@ export class CocktailMenuComponent implements OnInit{
   selectedCategory: string = '';
   selectedTeorAlcoholic: string = '';
   selectedTypeGlass: string = '';
+  selectedIngredient: string = '';
+  notSelectedType: string = '';
 
   selectCategoryControl = new FormControl('');
   selectTeorAlcoholicControl = new FormControl('');
   selectTypeGlassControl = new FormControl('');
+  selectIngredientControl = new FormControl('');
+  filterTypeControl = new FormControl('');
 
 
   listCocktailName: Cocktail[] = [];
@@ -30,7 +34,11 @@ export class CocktailMenuComponent implements OnInit{
   listCocktailTypeGlass: Cocktail[] = [];
   listCocktailIngredient: Cocktail[] = [];
 
-  constructor(private cocktailService: CocktailService){}
+  constructor(private cocktailService: CocktailService){
+    this.filterTypeControl.valueChanges.subscribe((value)=>{
+      this.filterType = value ?? '';
+    })
+  }
   ngOnInit(): void {
     this.getCocktailByCategory();
     this.getCocktailByTeorAlcoholic();
@@ -92,6 +100,10 @@ export class CocktailMenuComponent implements OnInit{
   }
 
   applyFilter():void{
+    if(!this.filterType){
+      this.notSelectedType = this.filterTypeControl.value ?? '';
+      console.log('Não foi selecionado: ', typeof(this.notSelectedType))
+    }
     if(this.filterType === 'name'){
       this.getCocktailByName();
     }
@@ -107,6 +119,10 @@ export class CocktailMenuComponent implements OnInit{
     if(this.filterType === 'typeGlass'){
       this.selectedTypeGlass = this.selectTypeGlassControl.value?? '';
       console.log('Tipo de Glass selecionado', this.selectedTypeGlass)
+    }
+    if(this.filterType === 'ingredient'){
+      this.selectedIngredient = this.selectIngredientControl.value?? '';
+      console.log('Ingrediente selecionado', this.selectedIngredient)
     }
   }
 }

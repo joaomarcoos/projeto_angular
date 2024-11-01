@@ -17,6 +17,8 @@ export class CocktailListComponent implements OnInit, OnChanges{
   @Input() selectedCategory!: string;
   @Input() selectedTeorAlcoholic!: string;
   @Input() selectedTypeGlass!: string;
+  @Input() selectedIngredient!: string;
+  @Input() notSelectedType!: string;
   @Input() cocktailNames: Cocktail[] = [];
 
   cocktails: Cocktail[] = [];
@@ -36,6 +38,11 @@ export class CocktailListComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+      if(changes['notSelectedType'] && !this.notSelectedType){
+        this.loadCocktails();
+        this.notFound = false;
+      }
+
       if(changes['cocktailNames']){
         if(this.cocktailNames && this.cocktailNames.length > 0){
           this.cocktails = this.cocktailNames;
@@ -57,6 +64,12 @@ export class CocktailListComponent implements OnInit, OnChanges{
       if(changes['selectedTypeGlass']){
         this.filterCocktailsByTypeGlass();
       }
+      if(changes['selectedIngredient']){
+        this.filterCocktailsByIngredient();
+      }
+
+      this.loadCocktails();
+      this.notFound = false;
   }
 
   loadCocktails(): void {
@@ -129,6 +142,22 @@ filterCocktailsByTypeGlass():void{
   if(this.selectedTypeGlass){
     this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strGlass.toLowerCase().includes(this.selectedTypeGlass.toLowerCase()));
     console.log('filtrador teor alcoolico: ', this.cocktails)
+
+    this.currentPage = 1;
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+  }
+}
+
+filterCocktailsByIngredient():void{
+  if(this.selectedIngredient){
+    this.cocktails = this.originalListCocktails.filter(cocktail =>
+    cocktail.strIngredient1?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
+    cocktail.strIngredient2?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
+    cocktail.strIngredient3?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
+    cocktail.strIngredient4?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
+    cocktail.strIngredient5?.toLowerCase().includes(this.selectedIngredient.toLowerCase()));
+    console.log('filtrador ingredientes: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();

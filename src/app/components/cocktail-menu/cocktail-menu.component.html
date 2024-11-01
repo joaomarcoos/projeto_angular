@@ -4,7 +4,7 @@
     <div class="container-form">
       <form class="form" (ngSubmit)="applyFilter()">
         <div class="form-select">
-          <select [(ngModel)]="filterType" name="filterType">
+          <select [formControl]="filterTypeControl">
             <option value="">Nenhum filtro selecionado</option>
             <option value="name">Por nome</option>
             <option value="category">Por categoria</option>
@@ -46,9 +46,9 @@
         </div>
 
         <div class="form-select" *ngIf="filterType === 'ingredient'">
-          <select name="selectedIngredient">
+          <select [formControl]="selectIngredientControl">
             <option value="">Selecione um ingrediente</option>
-            <option *ngFor="let ingredient of listCocktailIngredient" [value]="ingredient">
+            <option *ngFor="let ingredient of listCocktailIngredient" [value]="ingredient.strIngredient1">
               {{ ingredient.strIngredient1 }}
             </option>
           </select>
@@ -63,6 +63,8 @@
       [selectedCategory]="selectedCategory"
       [selectedTeorAlcoholic]="selectedTeorAlcoholic"
       [selectedTypeGlass]="selectedTypeGlass"
+      [selectedIngredient]="selectedIngredient"
+      [notSelectedType]="notSelectedType"
       >
     </app-cocktail-list>
 
