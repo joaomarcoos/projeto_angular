@@ -4,11 +4,12 @@ import { Cocktail } from '../../models/Cocktail';
 import { CocktailService } from '../../services/cocktail.service';
 import { SpinnerComponent } from "../spinner/spinner.component";
 import { forkJoin, map, race, tap } from 'rxjs';
+import { Route, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cocktail-list',
   standalone: true,
-  imports: [NgFor, SpinnerComponent, NgIf],
+  imports: [NgFor, SpinnerComponent, NgIf, RouterModule],
   templateUrl: './cocktail-list.component.html',
   styleUrl: './cocktail-list.component.scss'
 })
@@ -30,7 +31,7 @@ export class CocktailListComponent implements OnInit, OnChanges{
   isLoading: boolean = true;
   notFound: boolean = false;
 
-  constructor(private cocktailService: CocktailService){}
+  constructor(private cocktailService: CocktailService, private router: Router){}
 
   ngOnInit(): void {
     this.loadCocktails();
@@ -38,38 +39,19 @@ export class CocktailListComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      if(changes['notSelectedType'] && !this.notSelectedType){
+      if(changes['notSelectedType'] && this.notSelectedType){
         this.loadCocktails();
-        this.notFound = false;
       }
 
       if(changes['cocktailNames']){
         if(this.cocktailNames && this.cocktailNames.length > 0){
           this.cocktails = this.cocktailNames;
-          this.notFound = true;
-        }
-          this.loadCocktails()
           this.notFound = false;
+          return;
+        }
       }
 
-
-      if(changes['selectedCategory']){
-
-        this.filterCocktailsByCategory();
-      }
-
-      if(changes['selectedTeorAlcoholic']){
-        this.filterCocktailsByTeorAlcoholic();
-      }
-      if(changes['selectedTypeGlass']){
-        this.filterCocktailsByTypeGlass();
-      }
-      if(changes['selectedIngredient']){
-        this.filterCocktailsByIngredient();
-      }
-
-      this.loadCocktails();
-      this.notFound = false;
+      this.applyFilters();
   }
 
   loadCocktails(): void {
@@ -98,7 +80,7 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
         this.cocktails = allCocktails.sort((nameCocktail, letter) => nameCocktail.strDrink.localeCompare(letter.strDrink));
         this.originalListCocktails = [...this.cocktails];
-        this.notFound = allCocktails.length === 0;
+        this.notFound = this.cocktails.length === 0;
 
         this.calculatePage();
         this.updatePaginatedCocktails();
@@ -114,6 +96,27 @@ export class CocktailListComponent implements OnInit, OnChanges{
         this.isLoading = false;
       }
     })
+  }
+
+  applyFilters(): void {
+    this.cocktails = [...this.originalListCocktails];
+
+    if (this.selectedCategory) {
+      this.filterCocktailsByCategory();
+    }
+    if (this.selectedTeorAlcoholic) {
+      this.filterCocktailsByTeorAlcoholic();
+    }
+    if (this.selectedTypeGlass) {
+      this.filterCocktailsByTypeGlass();
+    }
+    if (this.selectedIngredient) {
+      this.filterCocktailsByIngredient();
+    }
+
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+    this.notFound = this.cocktails.length === 0;
   }
 
  filterCocktailsByCategory():void{
@@ -151,18 +154,22 @@ filterCocktailsByTypeGlass():void{
 
 filterCocktailsByIngredient():void{
   if(this.selectedIngredient){
-    this.cocktails = this.originalListCocktails.filter(cocktail =>
-    cocktail.strIngredient1?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
-    cocktail.strIngredient2?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
-    cocktail.strIngredient3?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
-    cocktail.strIngredient4?.toLowerCase().includes(this.selectedIngredient.toLowerCase())||
-    cocktail.strIngredient5?.toLowerCase().includes(this.selectedIngredient.toLowerCase()));
+    this.cocktails = this.originalListCocktails.filter(cocktail =>{
+      return cocktail.strIngredient1 === this.selectedIngredient;
+    })
+    this.cocktails = [...this.cocktails];
+    // cocktail.strIngredient1?.toLowerCase().includes(this.selectedIngredient.toLowerCase()));
     console.log('filtrador ingredientes: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();
     this.updatePaginatedCocktails();
   }
+}
+
+onCocktailClick(cocktail: Cocktail):void{
+  console.log('Coquetel:', cocktail);
+  console.log('clicou, dados do cocktail: ', this.router.navigate([`/detailsCocktail/{cocktail}`]));
 }
 
 
