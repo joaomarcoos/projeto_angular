@@ -167,9 +167,9 @@ filterCocktailsByIngredient():void{
   }
 }
 
-onCocktailClick(cocktail: Cocktail):void{
-  console.log('Coquetel:', cocktail);
-  console.log('clicou, dados do cocktail: ', this.router.navigate([`/detailsCocktail/{cocktail}`]));
+onCocktailClick(cocktailID: string):void{
+  console.log('Coquetel:', cocktailID);
+  this.router.navigate([`/detailsCocktail/${cocktailID}`])
 }
 
 

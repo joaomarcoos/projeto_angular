@@ -1,1 +1,43 @@
-<p>details-cocktail works!</p>
+<div class="container">
+
+  <div *ngIf="isLoading" class="loading-container">
+    <app-spinner></app-spinner>
+  </div>
+
+  <div class="sub-container" *ngIf="!isLoading">
+    <h1>{{cocktail?.strDrink}}</h1>
+    <div class="content">
+
+        <img [src]="cocktail?.strDrinkThumb" alt="{{cocktail?.strDrink}}" class="cocktail-image">
+
+      <div class="details">
+
+        <div class="detail-title">
+          <h3>{{cocktail?.strCategory}}</h3>
+          <h3>{{cocktail?.strAlcoholic}}</h3>
+        </div>
+
+        <p class="paragraph">Preparo: {{cocktail?.strInstructions}}</p>
+
+        <div class="container-table">
+          <h1>Ingredientes e Medidas</h1>
+          <table>
+            <tr>
+              <th>Ingredientes</th>
+              <th>Quantidade</th>
+            </tr>
+            <tr>
+              <td>{{cocktail?.strIngredient1}}</td>
+              <td>{{cocktail?.strMeasure1}}</td>
+            </tr>
+            <tr>
+              <td>{{cocktail?.strIngredient2}}</td>
+              <td>{{cocktail?.strMeasure2}}</td>
+            </tr>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

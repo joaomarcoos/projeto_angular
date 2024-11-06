@@ -10,6 +10,6 @@ export const routes: Routes = [
     path:'cocktailMenu', component: CocktailMenuComponent
   },
   {
-    path:'detailsCocktail/:id', component: DetailsCocktailComponent
+    path:'detailsCocktail/:cocktailID', component: DetailsCocktailComponent
   }
 ];

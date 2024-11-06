@@ -8,7 +8,7 @@
   </div>
 
   <div class="container-list-all " *ngIf="!isLoading && !notFound">
-    <div class="cocktail-card" *ngFor="let cocktail of paginatedCocktails" (click)="onCocktailClick(cocktail)">
+    <div class="cocktail-card" *ngFor="let cocktail of paginatedCocktails" (click)="onCocktailClick(cocktail.idDrink)">
       <img [src]="cocktail.strDrinkThumb" alt="{{cocktail.strDrink}}" class="cocktail-image">
       <div class="cocktail-info">
         <h3 class="cocktail-name">{{cocktail.strDrink}}</h3>

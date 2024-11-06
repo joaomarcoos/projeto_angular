@@ -10,12 +10,22 @@ export class CocktailService {
 
   constructor(private http: HttpClient) { }
 
+  private apiUrlID = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   private apiUrlLetter = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
   private apiUrlName = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   private apiUrlCategory = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
   private apiUrlTeorAlcoholic = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?a=list';
   private apiUrlTypeGlass = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list';
   private apiUrlIngredient = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
+
+
+getCocktailById(id: string):Observable<Cocktail>{
+  return this.http.get<{drinks: Cocktail[]}>(`${this.apiUrlID}${id}`)
+   .pipe(
+      map(response => response.drinks[0])
+    );
+
+}
 
   getCocktailsByLetter(letter: string): Observable<Cocktail[]>{
     return this.http.get<{drinks: Cocktail[]}>(`${this.apiUrlLetter}${letter}`)
