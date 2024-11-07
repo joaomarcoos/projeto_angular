@@ -39,19 +39,21 @@ export class CocktailListComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      if(changes['notSelectedType'] && this.notSelectedType){
-        this.loadCocktails();
+
+      if(changes['cocktailNames'] && this.cocktailNames && this.cocktailNames.length > 0){
+
+        console.log('coqueteis antes de ser preenchido: ', this.cocktails)
+        this.cocktails = [...this.cocktailNames];
+        console.log('está chegando aqui: ', this.cocktails)
+        this.notFound = false;
+
+        this.calculatePage();
+        this.updatePaginatedCocktails();
       }
 
-      if(changes['cocktailNames']){
-        if(this.cocktailNames && this.cocktailNames.length > 0){
-          this.cocktails = this.cocktailNames;
-          this.notFound = false;
-          return;
-        }
-      }
+        this.applyFilters();
 
-      this.applyFilters();
+
   }
 
   loadCocktails(): void {
@@ -121,50 +123,54 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
  filterCocktailsByCategory():void{
 
-  if(this.selectedCategory){
+
     this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strCategory.toLowerCase().includes(this.selectedCategory.toLowerCase()));
+    console.log('filtrador categoria: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();
     this.updatePaginatedCocktails();
-  }
+
  }
 
  filterCocktailsByTeorAlcoholic():void{
-  if(this.selectedTeorAlcoholic){
+
     this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strAlcoholic.toLowerCase().includes(this.selectedTeorAlcoholic.toLowerCase()));
     console.log('filtrador teor alcoolico: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();
     this.updatePaginatedCocktails();
- }
+
 }
 
 filterCocktailsByTypeGlass():void{
-  if(this.selectedTypeGlass){
+
     this.cocktails = this.originalListCocktails.filter(cocktail => cocktail.strGlass.toLowerCase().includes(this.selectedTypeGlass.toLowerCase()));
     console.log('filtrador teor alcoolico: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();
     this.updatePaginatedCocktails();
-  }
+
 }
 
 filterCocktailsByIngredient():void{
-  if(this.selectedIngredient){
-    this.cocktails = this.originalListCocktails.filter(cocktail =>{
-      return cocktail.strIngredient1 === this.selectedIngredient;
-    })
-    this.cocktails = [...this.cocktails];
-    // cocktail.strIngredient1?.toLowerCase().includes(this.selectedIngredient.toLowerCase()));
+
+    this.cocktails = this.originalListCocktails.filter(cocktail =>
+      cocktail.strIngredient1?.toLowerCase().includes(this.selectedIngredient.toLowerCase()) ||
+      cocktail.strIngredient2?.toLowerCase().includes(this.selectedIngredient.toLowerCase()) ||
+      cocktail.strIngredient3?.toLowerCase().includes(this.selectedIngredient.toLowerCase()) ||
+      cocktail.strIngredient4?.toLowerCase().includes(this.selectedIngredient.toLowerCase()) ||
+      cocktail.strIngredient5?.toLowerCase().includes(this.selectedIngredient.toLowerCase())
+    )
+    // this.cocktails = [...this.cocktails];
     console.log('filtrador ingredientes: ', this.cocktails)
 
     this.currentPage = 1;
     this.calculatePage();
     this.updatePaginatedCocktails();
-  }
+
 }
 
 onCocktailClick(cocktailID: string):void{

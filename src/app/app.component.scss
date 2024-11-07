@@ -63,7 +63,8 @@ body{
   padding: 1em;
   background: linear-gradient(#e66465, #9198e5);
   margin: 0;
-
+  color: white;
+  text-align: center;
 }
 
 .footer-content{
@@ -75,10 +76,10 @@ body{
 }
 
 .footer-content img{
-  display: flex;
-  width: 150px;
+  max-width: 100px;
+  width: 100%;
   height: auto;
-  margin-right: 3rem;
+  margin-right: 2vw;
 }
 
 .content-text p{
@@ -96,6 +97,7 @@ body{
   font-weight: bold;
   font-size: 16px;
   position: absolute;
+  left: 0;
   bottom: 0;
 }
 
