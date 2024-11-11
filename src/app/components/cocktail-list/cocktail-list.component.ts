@@ -4,7 +4,7 @@ import { Cocktail } from '../../models/Cocktail';
 import { CocktailService } from '../../services/cocktail.service';
 import { SpinnerComponent } from "../spinner/spinner.component";
 import { forkJoin, map, race, tap } from 'rxjs';
-import { Route, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cocktail-list',
@@ -40,19 +40,7 @@ export class CocktailListComponent implements OnInit, OnChanges{
 
   ngOnChanges(changes: SimpleChanges): void {
 
-      if(changes['cocktailNames'] && this.cocktailNames && this.cocktailNames.length > 0){
-
-        console.log('coqueteis antes de ser preenchido: ', this.cocktails)
-        this.cocktails = [...this.cocktailNames];
-        console.log('está chegando aqui: ', this.cocktails)
-        this.notFound = false;
-
-        this.calculatePage();
-        this.updatePaginatedCocktails();
-      }
-
-        this.applyFilters();
-
+    this.applyFilters();
 
   }
 
@@ -103,6 +91,11 @@ export class CocktailListComponent implements OnInit, OnChanges{
   applyFilters(): void {
     this.cocktails = [...this.originalListCocktails];
 
+    if(this.cocktailNames && this.cocktailNames.length > 0){
+      this.filterCocktailNames();
+    }
+
+
     if (this.selectedCategory) {
       this.filterCocktailsByCategory();
     }
@@ -119,6 +112,21 @@ export class CocktailListComponent implements OnInit, OnChanges{
     this.calculatePage();
     this.updatePaginatedCocktails();
     this.notFound = this.cocktails.length === 0;
+  }
+
+  filterCocktailNames():void{
+
+
+
+    console.log('coqueteis antes de ser preenchido: ', this.cocktails)
+    this.cocktails = [...this.cocktailNames];
+    console.log('está chegando aqui: ', this.cocktails)
+    this.notFound = false;
+
+    this.calculatePage();
+    this.updatePaginatedCocktails();
+
+
   }
 
  filterCocktailsByCategory():void{
